@@ -1,16 +1,46 @@
 //
-//  ContentView.swift
+//  VehicleListView.swift
 //  MottuOperator
 //
-//  Created by Arthur Mariano on 27/09/25.
+//  Created by Arthur Mariano on 29/09/25.
 //
 
 import SwiftUI
-import CoreLocation
 
-struct ContentView: View {
-    let mockVehicles: [Vehicle] = [
+struct VehicleListView: View {
+    @State private var search = ""
+    var vehicles = [Vehicle]()
+    
+    var filteredVehicles: [Vehicle] {
+        if search.isEmpty {
+            return vehicles
+        }
         
+        return vehicles.filter {
+            $0.identifier.localizedCaseInsensitiveContains(search)
+        }
+    }
+    
+    var body: some View {
+        List(filteredVehicles) { vehicle in
+            NavigationLink {
+                TrackerView(
+                    uuid: vehicle.beacon.id,
+                    major: vehicle.beacon.major,
+                    minor: vehicle.beacon.minor,
+                    vehicleId: vehicle.identifier
+                )
+            } label: {
+                VehicleListItemView(vehicle: vehicle)
+            }
+        }
+        .searchable(text: $search)
+        .navigationTitle("Yard Vehicles")
+    }
+}
+
+#Preview {
+    let mockVehicles = [
         Vehicle(
             id: UUID(),
             identifier: "BRA0S17",
@@ -117,16 +147,8 @@ struct ContentView: View {
         )
     ]
     
-    var body: some View {
-        NavigationStack {
-            VehicleListView(
-                vehicles: mockVehicles
-            )
-        }
+    NavigationStack {
+        VehicleListView(vehicles: mockVehicles)
+            .environment(BeaconService())
     }
-}
-
-#Preview {
-    ContentView()
-        .environment(BeaconService(defaultUUID: UUID(uuidString: "FDA50693-A4E2-4FB1-AFCF-C6EB11111111")!))
 }
