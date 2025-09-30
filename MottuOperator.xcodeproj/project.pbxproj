@@ -10,9 +10,22 @@
 		A4A57BA42E884DE100E2328F /* MottuOperator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MottuOperator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A407BA1A2E8866A900C6BC36 /* Exceptions for "MottuOperator" folder in "MottuOperator" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A4A57BA32E884DE100E2328F /* MottuOperator */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A4A57BA62E884DE100E2328F /* MottuOperator */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A407BA1A2E8866A900C6BC36 /* Exceptions for "MottuOperator" folder in "MottuOperator" target */,
+			);
 			path = MottuOperator;
 			sourceTree = "<group>";
 		};
@@ -256,6 +269,8 @@
 				DEVELOPMENT_TEAM = PVWKHC7QRZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MottuOperator/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Sua localização nos permite medir a proximidade com nossos dispositivos para uma melhor.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -288,6 +303,8 @@
 				DEVELOPMENT_TEAM = PVWKHC7QRZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MottuOperator/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Sua localização nos permite medir a proximidade com nossos dispositivos para uma melhor.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
