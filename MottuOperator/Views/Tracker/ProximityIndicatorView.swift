@@ -46,6 +46,7 @@ struct ProximityIndicatorView: View {
                     }
             }
         }
+        .animation(.default, value: isSignalWeek)
     }
 }
 
@@ -59,8 +60,8 @@ struct ProximityIndicatorView: View {
             value: $distance,
             in: 0...TrackerDisplayConstants.weakSignalThreshold + 0.5
         )
-            .accentColor(.orange)
-            .padding()
+        .accentColor(.orange)
+        .padding()
     }
     .background(.blue)
 }

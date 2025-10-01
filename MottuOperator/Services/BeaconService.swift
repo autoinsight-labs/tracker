@@ -25,15 +25,17 @@ extension CLProximity {
 class BeaconService: NSObject, CLLocationManagerDelegate {
     var distances: [String: Double] = [:]
     var proximities: [String: CLProximity] = [:]
+    
+    private let smoothingFactor: Double = 0.15
+    private let minAccuracy: Double = 0.01
 
     private func updateDistance(for key: String, newAccuracy: Double) {
-        guard newAccuracy > 0 else { return }
+        guard newAccuracy > minAccuracy else { return }
+        
         let old = distances[key] ?? newAccuracy
-        if newAccuracy < old {
-            distances[key] = old * 0.3 + newAccuracy * 0.7
-        } else {
-            distances[key] = old * 0.7 + newAccuracy * 0.3
-        }
+        let smoothed = old + (newAccuracy - old) * smoothingFactor
+        
+        distances[key] = smoothed
     }
     
     private let locationManager = CLLocationManager()
