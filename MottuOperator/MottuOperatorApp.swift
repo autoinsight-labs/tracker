@@ -6,13 +6,24 @@
 //
 
 import SwiftUI
+import Firebase
 
 @main
 struct MottuOperatorApp: App {
+    @State private var authService: AuthService
+    
+    init() {
+        FirebaseApp.configure()
+    
+        let auth = AuthService()
+        _authService = State(initialValue: auth)
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(BeaconService())
+                .environment(authService)
         }
     }
 }

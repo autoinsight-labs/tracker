@@ -9,6 +9,8 @@ import SwiftUI
 import CoreLocation
 
 struct ContentView: View {
+    @Environment(AuthService.self) private var authService: AuthService
+    
     let mockVehicles: [Vehicle] = [
         
         Vehicle(
@@ -119,9 +121,13 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            VehicleListView(
-                vehicles: mockVehicles
-            )
+            if authService.isSignedIn {
+                VehicleListView(
+                    vehicles: mockVehicles
+                )
+            } else {
+                SignUpView()
+            }
         }
     }
 }
@@ -129,4 +135,5 @@ struct ContentView: View {
 #Preview {
     ContentView()
         .environment(BeaconService(defaultUUID: UUID(uuidString: "FDA50693-A4E2-4FB1-AFCF-C6EB11111111")!))
+        .environment(AuthService())
 }

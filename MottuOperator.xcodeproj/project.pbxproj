@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		654F931C2EB92A0B007D2B92 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 654F931B2EB92A0B007D2B92 /* FirebaseAuth */; };
+		654F931E2EB92A0B007D2B92 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 654F931D2EB92A0B007D2B92 /* FirebaseCore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		A4A57BA42E884DE100E2328F /* MottuOperator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MottuOperator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				654F931E2EB92A0B007D2B92 /* FirebaseCore in Frameworks */,
+				654F931C2EB92A0B007D2B92 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +85,8 @@
 			);
 			name = MottuOperator;
 			packageProductDependencies = (
+				654F931B2EB92A0B007D2B92 /* FirebaseAuth */,
+				654F931D2EB92A0B007D2B92 /* FirebaseCore */,
 			);
 			productName = MottuOperator;
 			productReference = A4A57BA42E884DE100E2328F /* MottuOperator.app */;
@@ -107,6 +116,9 @@
 			);
 			mainGroup = A4A57B9B2E884DE100E2328F;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6591D5A72EB9284100B954D5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A4A57BA52E884DE100E2328F /* Products */;
 			projectDirPath = "";
@@ -349,6 +361,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6591D5A72EB9284100B954D5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		654F931B2EB92A0B007D2B92 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6591D5A72EB9284100B954D5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		654F931D2EB92A0B007D2B92 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6591D5A72EB9284100B954D5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A4A57B9C2E884DE100E2328F /* Project object */;
 }
