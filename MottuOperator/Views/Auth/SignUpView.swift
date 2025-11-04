@@ -10,10 +10,12 @@ import SwiftUI
 struct SignUpView: View {
     @Environment(AuthService.self) private var authService: AuthService
     
+    @State private var fullName: String = ""
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
     
+    @State private var errorFullName: String? = nil
     @State private var errorEmail: String? = nil
     @State private var errorPassword: String? = nil
     @State private var errorConfirmPassword: String? = nil
@@ -29,13 +31,14 @@ struct SignUpView: View {
     private var emailPlaceholder: String = "name@example.com"
     
     enum Field {
+        case fullName
         case email
         case password
         case confirmPassword
     }
     
     var isFormValid: Bool {
-        AuthValidation.isFormValid(email: email, password: password, confirmPassword: confirmPassword)
+        AuthValidation.isFormValid(fullName: fullName, email: email, password: password, confirmPassword: confirmPassword)
     }
     
     var body: some View {
@@ -55,6 +58,41 @@ struct SignUpView: View {
                 .padding(.bottom, 8)
                 
                 VStack(spacing: 14) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Full name")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        
+                        TextField("Your full name", text: $fullName)
+                            .textInputAutocapitalization(.words)
+                            .autocorrectionDisabled()
+                            .focused($focusedField, equals: .fullName)
+                            .submitLabel(.next)
+                            .onSubmit {
+                                focusedField = .email
+                            }
+                            .onChange(of: fullName) {
+                                errorFullName = nil
+                                authError = nil
+                            }
+                            .padding(16)
+                            .background(.thinMaterial)
+                            .clipShape(RoundedRectangle(cornerRadius: 48, style: .continuous))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 48, style: .continuous)
+                                    .stroke(AuthValidation.borderColor(for: errorFullName), lineWidth: 1)
+                            }
+
+                        if let errorFullName {
+                            Label(errorFullName, systemImage: "exclamationmark.circle.fill")
+                                .foregroundStyle(.red)
+                                .font(.footnote)
+                                .transition(.opacity.combined(with: .move(edge: .top)))
+                                .accessibilityLabel("Name error: \(errorFullName)")
+                        }
+                    }
+
+                    
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Email")
                             .font(.subheadline)
@@ -275,6 +313,12 @@ struct SignUpView: View {
         authError = nil
         
         let trimmedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
+        errorFullName = AuthValidation.validateFullName(fullName)
+        
+        if errorFullName != nil {
+            focusedField = .fullName
+            return
+        }
         
         if trimmedEmail.isEmpty {
             errorEmail = "Email is required."
@@ -310,7 +354,7 @@ struct SignUpView: View {
         }
         
         isLoading = true
-        authService.signUp(email: trimmedEmail, password: password) { error in
+        authService.signUp(fullName: fullName, email: trimmedEmail, password: password) { error in
             DispatchQueue.main.async {
                 isLoading = false
                 if let error = error {

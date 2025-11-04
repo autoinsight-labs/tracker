@@ -14,6 +14,17 @@ enum AuthValidation {
         error != nil ? .red : Color(.separator)
     }
     
+    static func validateFullName(_ name: String) -> String? {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            return "Name is required."
+        } else if trimmed.count < 3 {
+            return "Enter your full name."
+        } else {
+            return nil
+        }
+    }
+    
     static func validateEmail(_ email: String) -> String? {
         let trimmed = email.trimmingCharacters(in: .whitespacesAndNewlines)
         if trimmed.isEmpty {
@@ -45,9 +56,13 @@ enum AuthValidation {
         }
     }
     
-    static func isFormValid(email: String, password: String, confirmPassword: String? = nil) -> Bool {
+    static func isFormValid(fullName: String? = nil, email: String, password: String, confirmPassword: String? = nil) -> Bool {
         guard validateEmail(email) == nil, validatePassword(password) == nil else {
             return false
+        }
+        
+        if let fullName {
+            return validateFullName(fullName) == nil
         }
         
         if let confirmPassword {

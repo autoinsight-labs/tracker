@@ -25,7 +25,7 @@ class AuthService {
         self.isSignedIn = user != nil
     }
     
-    func signUp(email: String, password: String, completion: @escaping (Error?) -> Void) {
+    func signUp(fullName: String, email: String, password: String, completion: @escaping (Error?) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) {  result, error in
             if let error = error {
                 print("Sign Up Error:")
@@ -34,9 +34,22 @@ class AuthService {
                 return
             }
             
-            self.user = Auth.auth().currentUser
-            self.isSignedIn = self.user != nil
-            completion(nil)
+            guard let user = result?.user else {
+                completion(AuthenticationError.runtimeError("User not found after creation"))
+                return
+            }
+            
+            let changeRequest = user.createProfileChangeRequest()
+            changeRequest.displayName = fullName
+            changeRequest.commitChanges { error in
+                if let error = error {
+                    print("Error while defining user name:", error)
+                }
+                
+                self.user = Auth.auth().currentUser
+                self.isSignedIn = self.user != nil
+                completion(error)
+            }
         }
     }
     
