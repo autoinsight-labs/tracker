@@ -358,27 +358,8 @@ struct QRCodeScannerView: UIViewControllerRepresentable {
             controller?.stopScanning()
             
             do {
-                guard let data = stringValue.data(using: .utf8) else {
-                    throw ScannerError.invalidPayload
-                }
-                
-                if let payload = try? JSONDecoder().decode(QRBeaconPayload.self, from: data) {
-                    let beacon = BeaconResult(
-                        uuid: payload.beacon.uuid,
-                        major: payload.beacon.major,
-                        minor: payload.beacon.minor
-                    )
-                    parent.onResult(.success(beacon))
-                } else if let beaconOnly = try? JSONDecoder().decode(QRBeaconPayload.Beacon.self, from: data) {
-                    let beacon = BeaconResult(
-                        uuid: beaconOnly.uuid,
-                        major: beaconOnly.major,
-                        minor: beaconOnly.minor
-                    )
-                    parent.onResult(.success(beacon))
-                } else {
-                    throw ScannerError.invalidPayload
-                }
+                let beacon = try parseBeaconPayload(from: stringValue)
+                parent.onResult(.success(beacon))
             } catch let error as ScannerError {
                 parent.onResult(.failure(error))
             } catch {
@@ -390,6 +371,60 @@ struct QRCodeScannerView: UIViewControllerRepresentable {
             guard !didEmitResult else { return }
             didEmitResult = true
             parent.onResult(.failure(.cameraUnavailable))
+        }
+        
+        private func parseBeaconPayload(from string: String) throws -> BeaconResult {
+            let sanitized = string.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard let data = sanitized.data(using: .utf8) else {
+                throw ScannerError.invalidPayload
+            }
+            
+            if let payload = try? JSONDecoder().decode(QRBeaconPayload.self, from: data) {
+                return BeaconResult(
+                    uuid: payload.beacon.uuid,
+                    major: String(payload.beacon.major),
+                    minor: String(payload.beacon.minor)
+                )
+            }
+            
+            if let beaconOnly = try? JSONDecoder().decode(QRBeaconPayload.Beacon.self, from: data) {
+                return BeaconResult(
+                    uuid: beaconOnly.uuid,
+                    major: String(beaconOnly.major),
+                    minor: String(beaconOnly.minor)
+                )
+            }
+            
+            if let jsonObject = try? JSONSerialization.jsonObject(with: data),
+               let dict = jsonObject as? [String: Any],
+               let uuidString = dict["uuid"] as? String,
+               let uuid = UUID(uuidString: uuidString) {
+                let majorString = Self.normalizedString(from: dict["major"])
+                let minorString = Self.normalizedString(from: dict["minor"])
+                
+                guard let majorString, let minorString else {
+                    throw ScannerError.invalidPayload
+                }
+                
+                return BeaconResult(
+                    uuid: uuid,
+                    major: majorString,
+                    minor: minorString
+                )
+            }
+            
+            throw ScannerError.invalidPayload
+        }
+        
+        private static func normalizedString(from value: Any?) -> String? {
+            switch value {
+            case let string as String:
+                return string.trimmingCharacters(in: .whitespacesAndNewlines)
+            case let number as NSNumber:
+                return number.stringValue
+            default:
+                return nil
+            }
         }
     }
     
