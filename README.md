@@ -2,172 +2,143 @@
 
 <div align="center">
   
-**Aplicativo iOS para localização e rastreamento de veículos usando tecnologia Beacon**
+**Aplicativo iOS para gestão e rastreamento de frota com beacons, convites e cadastro de veículos.**
 
 ![Platform](https://img.shields.io/badge/platform-iOS-lightgrey)
 ![Swift](https://img.shields.io/badge/Swift-5.9+-orange)
 ![SwiftUI](https://img.shields.io/badge/SwiftUI-blue)
+![Firebase Auth](https://img.shields.io/badge/Firebase-Auth-yellow)
 
 </div>
 
-## 📋 Sobre o Projeto
+## 🧭 Índice
+- [Visão Geral](#-visão-geral)
+- [Principais Capacidades](#-principais-capacidades)
+- [Stack Tecnológica](#-stack-tecnológica)
+- [Fluxos do Produto](#-fluxos-do-produto)
+- [Arquitetura](#-arquitetura)
+- [Serviços e Integrações](#-serviços-e-integrações)
+- [Pré-requisitos](#-pré-requisitos)
+- [Configuração do Ambiente](#-configuração-do-ambiente)
+- [Execução Rápida](#-execução-rápida)
+- [Dados de Teste](#-dados-de-teste)
+- [Internacionalização e Acessibilidade](#-internacionalização-e-acessibilidade)
+- [Equipe](#-equipe)
+- [Licença](#-licença)
 
-Mottu Operator é um aplicativo iOS nativo desenvolvido em SwiftUI que permite aos operadores localizar e rastrear veículos em um pátio usando tecnologia de Bluetooth Beacons (iBeacon). O app utiliza a proximidade de beacons instalados nos veículos para calcular distâncias em tempo real e auxiliar na localização física de veículos específicos.
+## 📋 Visão Geral
+O **Mottu Operator** é um aplicativo nativo para iOS, desenvolvido em SwiftUI, que auxilia operadores de pátios Mottu a administrar convites, cadastrar veículos e localizar motocicletas equipadas com beacons Bluetooth (iBeacon). O app combina autenticação via Firebase, consumo de API REST e tecnologia de proximidade para entregar uma experiência completa de operação em campo.
 
-## ✨ Funcionalidades
+## ✨ Principais Capacidades
+- **Autenticação segura**: fluxo de cadastro e login com validação de formulários e Firebase Authentication.
+- **Gestão de convites**: listagem, aceitação e recusa de convites recebidos pelos operadores, com persistência do pátio ativo.
+- **Operação de veículos**:
+  - Lista com estados de carregamento, busca por placa e detalhes completos.
+  - Cadastro de novos veículos com scanner de QR Code para dados do beacon.
+  - Atualização de status, responsável e beacon diretamente pela API.
+- **Rastreamento em tempo real**:
+  - Visualização de proximidade com indicadores visuais e leitura suavizada.
+  - Comunicação contínua com CoreLocation para ranging de beacons iBeacon.
 
-### 🚗 Lista de Veículos
-- Visualização de todos os veículos disponíveis no pátio
-- Exibição de informações do veículo (identificador, modelo e ano)
-- Busca e filtro de veículos por identificador
-- Indicação de distância em tempo real para cada veículo
-- Estados de carregamento inteligentes (loading, encontrado, não encontrado)
+## 🛠 Stack Tecnológica
+- **SwiftUI & Observation** para UI declarativa reativa.
+- **CoreLocation** para ranging de beacons e cálculo de distância.
+- **AVFoundation** para leitura de QR Codes de beacons.
+- **Firebase Authentication** (via Swift Package Manager) para login/cadastro.
+- **Async/Await** + `Task` para operações assíncronas seguras.
 
-### 📍 Rastreamento em Tempo Real
-- Interface de rastreamento visual com indicador de proximidade
-- Círculo animado que cresce conforme a distância aumenta
-- Exibição de distância formatada (metros/centímetros)
-- Indicadores de proximidade (immediate, near, far, unknown)
-- Aviso quando o sinal está fraco
-- Atualização contínua das medições
+## 🧱 Fluxos do Produto
+### Autenticação
+1. Usuário realiza cadastro com nome, e-mail e senha.
+2. Validações de formulário orientam correções em tempo real.
+3. Após cadastro ou login, o token do Firebase é reutilizado pelos serviços de rede.
 
-### 🎯 Precisão e Confiabilidade
-- Algoritmo de suavização de distância (smoothing) para reduzir oscilações
-- Filtro de precisão mínima para ignorar leituras imprecisas
-- Sistema de timeout para detectar beacons não encontrados
-- Suporte a múltiplos beacons simultâneos
+### Convites do Pátio
+1. Convites pendentes são carregados ao entrar no app.
+2. Ao aceitar um convite, o pátio ativo é salvo localmente (`UserDefaults`).
+3. Recusas são refletidas imediatamente na lista.
 
-## 🛠 Tecnologias Utilizadas
+### Operação de Veículos
+1. Lista mostra status, modelo e beacon associado.
+2. Cadastro de novos veículos permite buscar responsáveis e escanear QR Code do beacon.
+3. Serviços REST atualizam ou criam registros diretamente na API Mottu.
 
-- **SwiftUI** - Framework moderno para construção de interfaces
-- **CoreLocation** - Framework para detecção e ranging de beacons
-- **Swift Observation** - Sistema de observação para gerenciamento de estado
-- **iBeacon Technology** - Protocolo Bluetooth Low Energy para proximidade
-- **iOS 17+** - Recursos modernos do iOS
+### Rastreamento com Beacon
+1. Operador escolhe um veículo para abrir o modo tracker.
+2. `BeaconService` inicia o ranging do beacon configurado.
+3. Distâncias são suavizadas (EMA) e exibidas com indicação visual de proximidade.
 
 ## 🏗 Arquitetura
-
-O projeto segue uma arquitetura MVVM (Model-View-ViewModel) com princípios de SwiftUI:
+O projeto segue MVVM com injeção por ambiente (`@Environment`) e observabilidade (`@Observable`).
 
 ```
 MottuOperator/
-├── Models/
-│   └── Vehicle.swift              # Modelo de dados do veículo
-├── Services/
-│   └── BeaconService.swift        # Serviço de detecção de beacons
+├── Models/                     # Modelos de domínio (Vehicle, Invite, YardEmployee...)
+├── Services/                   # Camada de acesso a APIs, beacons e auth
+│   ├── AuthService.swift       # Firebase Auth wrapper
+│   ├── InviteService.swift     # Gestão de convites e pátio ativo
+│   ├── VehicleService.swift    # CRUD de veículos e colaboradores
+│   ├── BeaconService.swift     # Ranging e smoothing de beacons
+│   ├── WebService.swift        # Cliente HTTP genérico com decode typed
+│   ├── APIConfiguration.swift  # Resolução do endpoint base
+│   └── YardStorage.swift       # Persistência local do ID do pátio
+├── Shared/
+│   └── Auth/                   # Regras de validação de formulários
 ├── Views/
-│   ├── ContentView.swift          # View principal
-│   ├── Vehicle/
-│   │   ├── VehicleListView.swift      # Lista de veículos
-│   │   └── VehicleListItemView.swift  # Item individual da lista
-│   └── Tracker/
-│       ├── TrackerView.swift              # View de rastreamento
-│       ├── TrackerHeaderView.swift        # Cabeçalho do tracker
-│       ├── ProximityIndicatorView.swift   # Indicador visual de proximidade
-│       ├── DistanceDisplayView.swift      # Exibição da distância
-│       ├── DistanceFormatter.swift        # Formatação de distâncias
-│       └── TrackerDisplayConstants.swift  # Constantes de UI
-└── MottuOperatorApp.swift         # Entry point do app
+│   ├── Auth/                   # Fluxos de Sign In / Sign Up
+│   ├── Invite/                 # Pendências de convite
+│   ├── Vehicle/                # Lista, detalhe e criação de veículos
+│   └── Tracker/                # Telas e componentes do modo rastreador
+└── MottuOperatorApp.swift      # Entry point com injeção de dependências
 ```
 
-### Componentes Principais
+### Padrões adotados
+- **ViewModels leves** utilizando serviços observáveis.
+- **Networking** com `URLSession` estruturada e tratamento de erros customizado.
+- **Tratamento de estados** (`loading`, `error`, `empty`) em views principais.
+- **Injeção ambiente** facilita pré-visualizações e testes futuros.
 
-#### 📦 Models
-- **Vehicle**: Estrutura que representa um veículo com identificador, beacon data e informações do modelo
+## 🌐 Serviços e Integrações
+| Serviço | Uso | Observações |
+| ------- | --- | ----------- |
+| Firebase Authentication | Cadastro/Login | Requer `GoogleService-Info.plist` configurado. |
+| API REST Mottu | Convites, veículos, colaboradores | Endpoint base configurável via `API_BASE_URL`. |
+| CoreLocation | Ranging iBeacon | Necessita permissão *When In Use*. |
+| AVFoundation | Scanner QR Code | Necessita permissão de câmera. |
 
-#### 🔧 Services
-- **BeaconService**: Serviço observável responsável por:
-  - Gerenciar permissões de localização
-  - Iniciar/parar ranging de beacons
-  - Calcular e suavizar distâncias
-  - Detectar níveis de proximidade
-  - Manter estado de múltiplos beacons
+## 📱 Pré-requisitos
+- macOS com **Xcode 15.0+** e SDK iOS 17.
+- Dispositivo físico com Bluetooth 4.0+ (beacons não funcionam no simulador).
+- Conta Firebase com projeto configurado para iOS.
+- API Mottu disponível (local, staging ou produção).
 
-#### 🎨 Views
-- **VehicleListView**: Lista principal com busca e navegação
-- **TrackerView**: Interface de rastreamento com indicadores visuais
-- **ProximityIndicatorView**: Círculo animado que representa proximidade
-- **DistanceDisplayView**: Exibição formatada da distância e proximidade
-
-## 🔍 Como Funciona
-
-### Detecção de Beacons
-
-1. **Configuração**: Cada veículo possui um beacon com UUID, Major e Minor únicos
-2. **Ranging**: O app escaneia continuamente por beacons próximos
-3. **Cálculo**: CoreLocation fornece distância estimada em metros
-4. **Suavização**: Algoritmo de média móvel exponencial reduz oscilações
-5. **Atualização**: Interface atualiza em tempo real com novas medições
-
-### Algoritmo de Suavização
-
-```swift
-smoothed = old + (new - old) * smoothingFactor
-```
-
-- **Smoothing Factor**: 0.15 (15% da nova leitura)
-- **Benefício**: Reduz ruído e fornece leitura mais estável
-- **Trade-off**: Pequeno delay na atualização vs estabilidade
-
-### Níveis de Proximidade
-
-| Nível | Descrição | Distância Típica |
-|-------|-----------|------------------|
-| **Immediate** | Muito próximo | < 0.5m |
-| **Near** | Próximo | 0.5m - 3m |
-| **Far** | Longe | > 3m |
-| **Unknown** | Desconhecido | Sinal não detectado |
-
-## 📱 Requisitos
-
-- iOS 17.0 ou superior
-- Xcode 15.0 ou superior
-- Dispositivo iOS com suporte a Bluetooth 4.0+ (beacons requerem hardware real, não funciona no simulador)
-- Permissões de localização ("When In Use")
-
-## 🚀 Como Executar
-
-1. **Clone o repositório**
+## � Configuração do Ambiente
+1. **Clonar o repositório**
    ```bash
    git clone https://github.com/autoinsight-labs/tracker.git
    cd tracker
    ```
+2. **Firebase Authentication**
+   - Crie um app iOS no console Firebase.
+   - Baixe o `GoogleService-Info.plist` e copie para `MottuOperator/` (substitua o existente, se aplicável).
+   - Habilite Email/Password em *Authentication > Sign-in method*.
+3. **Endpoint da API**
+   - Defina o valor do endpoint via Scheme (`Edit Scheme > Run > Arguments > Environment`: `API_BASE_URL=https://sua-api`) **ou** edite o `Info.plist` e atualize a chave `API_BASE_URL`.
+4. **Permissões**
+   - Verifique textos das chaves `NSLocationWhenInUseUsageDescription` e `NSCameraUsageDescription` em `Info.plist` para refletirem a política da sua empresa.
+5. **Dependências SwiftPM**
+   - Xcode fará o *resolve* automaticamente ao abrir o projeto. Certifique-se de ter acesso ao GitHub para os pacotes Firebase.
 
-2. **Abra o projeto no Xcode**
+## 🚀 Execução Rápida
+1. Abra o projeto:
    ```bash
    open MottuOperator.xcodeproj
    ```
-
-3. **Configure permissões**
-   - O app solicita permissão de localização automaticamente
-   - Verifique que as permissões estão configuradas no Info.plist
-
-4. **Execute no dispositivo**
-   - Selecione um dispositivo físico (não simulador)
-   - Pressione `Cmd + R` para build e executar
-
-## 🔐 Permissões Necessárias
-
-O app requer as seguintes permissões (já configuradas no Info.plist):
-
-- `NSLocationWhenInUseUsageDescription` - Para detectar beacons próximos
-
-## 🎯 Casos de Uso
-
-### Operador de Pátio
-1. Abre o app e visualiza lista de veículos
-2. Vê distância em tempo real de cada veículo
-3. Busca veículo específico pelo identificador
-4. Toca no veículo para abrir rastreamento detalhado
-5. Segue indicador visual para encontrar o veículo
-
-### Gerente de Frota
-1. Visualiza todos veículos disponíveis
-2. Verifica quais estão próximos vs distantes
-3. Identifica veículos não detectados (fora de alcance ou beacon com problema)
+2. Selecione um dispositivo físico.
+3. Build & Run (`⌘ + R`).
+4. Autorize localização e câmera quando solicitado.
 
 ## 🧪 Dados de Teste
-
 O app inclui 8 veículos mockados para demonstração:
 
 | Identificador | Modelo | Ano | Major | Minor |
@@ -181,50 +152,22 @@ O app inclui 8 veículos mockados para demonstração:
 | RIO4321 | Mottu City | 2018 | 13000 | 63000 |
 | FOR9876 | Mottu City | 2022 | 14000 | 64000 |
 
-## 🎨 Interface do Usuário
+## � Internacionalização e Acessibilidade
+- Strings localizadas em `Localizable.xcstrings` facilitam traduções futuras.
+- Componentes consideram leitura por VoiceOver (labels e combinações acessíveis).
+- Layouts reagem a `Dynamic Type` e estados de carregamento com feedback visual.
 
-### Design System
-- **Cor primária**: Azul (fundo do tracker)
-- **Cor de texto**: Branco (no tracker) / Preto (na lista)
-- **Fontes**: SF Rounded para números grandes
-- **Animações**: Suaves e responsivas
-- **Acessibilidade**: Elementos combinados para leitores de tela
+## 👥 Equipe
 
-### Componentes Visuais
-- Círculo de proximidade com crescimento animado
-- Exibição grande e clara da distância
-- Indicador textual de proximidade
-- Lista com estados de carregamento
+| Nome                        | RM      | Turma    | E-mail                 | GitHub                                         | LinkedIn                                   |
+|-----------------------------|---------|----------|------------------------|------------------------------------------------|--------------------------------------------|
+| Arthur Vieira Mariano       | RM554742| 2TDSPF   | arthvm@proton.me       | [@arthvm](https://github.com/arthvm)           | [arthvm](https://linkedin.com/in/arthvm/)  |
+| Guilherme Henrique Maggiorini| RM554745| 2TDSPF  | guimaggiorini@gmail.com| [@guimaggiorini](https://github.com/guimaggiorini) | [guimaggiorini](https://linkedin.com/in/guimaggiorini/) |
+| Ian Rossato Braga           | RM554989| 2TDSPY   | ian007953@gmail.com    | [@iannrb](https://github.com/iannrb)           | [ianrossato](https://linkedin.com/in/ianrossato/)      |
 
-## 🔧 Configuração de Beacons
-
-Para usar com beacons reais:
-
-1. Configure o UUID do beacon (padrão: gerado randomicamente)
-2. Defina valores únicos de Major e Minor para cada veículo
-3. Atualize os dados dos veículos em `ContentView.swift`
-4. Configure os beacons físicos com os mesmos parâmetros
-
-### Exemplo de Beacon
-```swift
-Vehicle.BeaconData(
-    id: UUID(uuidString: "FDA50693-A4E2-4FB1-AFCF-C6EB07647825")!,
-    major: 10167,
-    minor: 61958
-)
-```
-
-## 👥 Equipe de Desenvolvimento
-
-| Nome                      | RM       | E-mail                  | GitHub                                      | LinkedIn                                            |
-| ------------------------- | -------- | ----------------------- | ------------------------------------------- | --------------------------------------------------- |
-| Arthur Vieira Mariano     | RM554742 | arthvm@proton.me        | [@arthvm](https://github.com/arthvm)        | [arthvm](https://linkedin.com/in/arthvm/)           |
-| Guilherme Henrique Maggiorini | RM554745 | guimaggiorini@gmail.com | [@guimaggiorini](https://github.com/guimaggiorini) | [guimaggiorini](https://linkedin.com/in/guimaggiorini/) |
-| Ian Rossato Braga         | RM554989 | ian007953@gmail.com     | [@iannrb](https://github.com/iannrb)        | [ianrossato](https://linkedin.com/in/ianrossato/)   |
 
 ## 📄 Licença
-
-Este projeto foi desenvolvido para fins acadêmicos como parte do challenge da Mottu FIAP.
+Projeto desenvolvido para fins acadêmicos no challenge FIAP x Mottu.
 
 ---
 
