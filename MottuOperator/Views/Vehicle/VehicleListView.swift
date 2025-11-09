@@ -12,6 +12,7 @@ struct VehicleListView: View {
     @Environment(VehicleService.self) private var vehicleService: VehicleService
     
     @State private var search = ""
+    @State private var isPresentingCreate = false
     
     var filteredVehicles: [Vehicle] {
         if search.isEmpty {
@@ -33,12 +34,31 @@ struct VehicleListView: View {
         }
         .navigationTitle("Yard Vehicles")
         .searchable(text: $search)
+        .toolbar {
+            DefaultToolbarItem(kind: .search, placement: .bottomBar)
+            ToolbarSpacer(placement: .bottomBar)
+            ToolbarItem(placement: .bottomBar) {
+                if inviteService.activeYardID != nil {
+                    Button {
+                        isPresentingCreate = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+        }
         .task(id: inviteService.activeYardID) { [inviteService] in
             guard let yardId = inviteService.activeYardID else {
                 vehicleService.clear()
                 return
             }
             await vehicleService.fetchVehicles(for: yardId, forceRefresh: vehicleService.currentYardID != yardId)
+        }
+        .sheet(isPresented: $isPresentingCreate) {
+            if let yardId = inviteService.activeYardID {
+                VehicleCreateView(yardID: yardId)
+                    .environment(vehicleService)
+            }
         }
     }
 }

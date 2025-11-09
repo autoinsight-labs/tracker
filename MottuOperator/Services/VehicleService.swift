@@ -109,6 +109,22 @@ class VehicleService {
         )
         return response.data
     }
+    
+    func createVehicle(
+        in yardID: UUID,
+        request: VehicleCreateRequest
+    ) async throws -> VehicleDetail {
+        let endpoint = "\(APIConfiguration.baseURL)/v2/yards/\(yardID.uuidString)/vehicles"
+        let body = try JSONEncoder().encode(request)
+        
+        return try await webService.sendRequest(
+            toURL: endpoint,
+            method: .post,
+            headers: ["Content-Type": "application/json"],
+            body: body,
+            configureDecoder: decoderConfigurator
+        )
+    }
 }
 
 struct VehicleUpdateRequest: Encodable {
@@ -139,6 +155,26 @@ struct VehicleUpdateRequest: Encodable {
         case status
         case assigneeId
         case beacon
+    }
+}
+
+struct VehicleCreateRequest: Encodable {
+    struct Beacon: Encodable {
+        let uuid: UUID
+        let major: String
+        let minor: String
+    }
+    
+    let plate: String
+    let model: Vehicle.Model
+    let beacon: Beacon
+    let assigneeId: UUID?
+    
+    private enum CodingKeys: String, CodingKey {
+        case plate
+        case model
+        case beacon
+        case assigneeId
     }
 }
 
