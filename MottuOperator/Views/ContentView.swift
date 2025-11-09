@@ -10,17 +10,24 @@ import CoreLocation
 
 struct ContentView: View {
     @Environment(AuthService.self) private var authService: AuthService
-    
-    let mockVehicles: [Vehicle] = []
+    @Environment(InviteService.self) private var inviteService: InviteService
+    @Environment(VehicleService.self) private var vehicleService: VehicleService
     
     var body: some View {
         NavigationStack {
             if authService.isSignedIn {
-                VehicleListView(
-                    vehicles: mockVehicles
-                )
+                if inviteService.activeYardID != nil {
+                    VehicleListView()
+                } else {
+                    PendingInvitesView()
+                }
             } else {
                 SignUpView()
+            }
+        }
+        .onChange(of: inviteService.activeYardID) { _, newValue in
+            if newValue == nil {
+                Task { vehicleService.clear() }
             }
         }
     }

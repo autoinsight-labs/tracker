@@ -78,4 +78,26 @@ class AuthService {
             print("Sign Out Error: \(error.localizedDescription)")
         }
     }
+    
+    func getIDToken(forceRefresh: Bool = false) async throws -> String {
+        guard let currentUser = Auth.auth().currentUser else {
+            throw AuthenticationError.runtimeError("User not signed in")
+        }
+        
+        return try await withCheckedThrowingContinuation { continuation in
+            currentUser.getIDTokenForcingRefresh(forceRefresh) { token, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+                
+                guard let token = token else {
+                    continuation.resume(throwing: AuthenticationError.runtimeError("Failed to retrieve ID token"))
+                    return
+                }
+                
+                continuation.resume(returning: token)
+            }
+        }
+    }
 }

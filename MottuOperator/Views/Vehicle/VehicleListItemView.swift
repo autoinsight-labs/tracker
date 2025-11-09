@@ -13,58 +13,42 @@ struct VehicleListItemView: View {
     
     let vehicle: Vehicle
     
-    var beaconKey: String {
-        "\(vehicle.beacon.uuid)_\(vehicle.beacon.major)_\(vehicle.beacon.minor)"
+    private var beaconKey: String? {
+        guard let beacon = vehicle.beacon else { return nil }
+        return "\(beacon.uuid)_\(beacon.major)_\(beacon.minor)"
     }
     
     var body: some View {
         HStack {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text(vehicle.plate)
                     .font(.headline)
                 
-                HStack {
-                    Text(vehicle.model.rawValue)
-                        .foregroundStyle(.secondary)
-                        .font(.subheadline)
-                    
-                    Text("•")
-                        .foregroundStyle(.secondary)
-                        .font(.subheadline)
-                    
-                    Text(vehicle.enteredAt.formatted())
-                        .foregroundStyle(.secondary)
-                        .font(.subheadline)
-                }
+                vehicleMetadata
             }
             
             Spacer()
             
-            switch distance {
-            case .loading:
-                ProgressView()
-                    .controlSize(.regular)
-            case .found(let distance):
-                Text(distance)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            case .notFound:
-                Text("—")
-                    .foregroundStyle(.secondary)
-                    .font(.subheadline)
-            }
+            distanceView
         }
-        .task {
+        .task(id: vehicle.beacon?.id) {
+            guard let beacon = vehicle.beacon else {
+                distance = .notAvailable
+                return
+            }
+            
+            distance = .loading
             beaconService.startRanging(
-                uuid: vehicle.beacon.uuid,
-                major: vehicle.beacon.major,
-                minor: vehicle.beacon.minor
+                uuid: beacon.uuid,
+                major: beacon.major,
+                minor: beacon.minor
             )
             
             let timeout = Date().addingTimeInterval(10)
             
             while Date() < timeout {
-                if let rawDistance = beaconService.distances[beaconKey] {
+                if let key = beaconKey,
+                   let rawDistance = beaconService.distances[key] {
                     distance = .found(formatDistance(rawDistance))
                     return
                 }
@@ -74,6 +58,49 @@ struct VehicleListItemView: View {
             distance = .notFound
         }
  
+    }
+    
+    @ViewBuilder
+    private var vehicleMetadata: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 6) {
+                Text(vehicle.model.displayName)
+                Text("•")
+                Text(vehicle.status.displayName)
+            }
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+            
+            Text(vehicle.enteredAt.formatted(date: .abbreviated, time: .shortened))
+                .font(.footnote)
+                .foregroundStyle(.tertiary)
+        }
+    }
+    
+    @ViewBuilder
+    private var distanceView: some View {
+        switch distance {
+        case .loading:
+            if vehicle.beacon != nil {
+                ProgressView()
+                    .controlSize(.regular)
+            } else {
+                Text("—")
+                    .foregroundStyle(.secondary)
+                    .font(.subheadline)
+            }
+        case .found(let value):
+            Text(value)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        case .notFound:
+            Text("No signal")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        case .notAvailable:
+            Image(systemName: "antenna.radiowaves.left.and.right.slash")
+                .foregroundStyle(.secondary)
+        }
     }
     
     private func formatDistance(_ rawDistance: Double) -> String {
@@ -89,6 +116,7 @@ struct VehicleListItemView: View {
     }
     
     private enum DistanceState {
+        case notAvailable
         case loading
         case found(String)
         case notFound
