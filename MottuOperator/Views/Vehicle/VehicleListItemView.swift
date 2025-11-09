@@ -36,12 +36,19 @@ struct VehicleListItemView: View {
                 distance = .notAvailable
                 return
             }
+            guard
+                let major = beacon.majorAsUInt16,
+                let minor = beacon.minorAsUInt16
+            else {
+                distance = .notAvailable
+                return
+            }
             
             distance = .loading
             beaconService.startRanging(
                 uuid: beacon.uuid,
-                major: beacon.major,
-                minor: beacon.minor
+                major: major,
+                minor: minor
             )
             
             let timeout = Date().addingTimeInterval(10)

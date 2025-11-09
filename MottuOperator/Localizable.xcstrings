@@ -95,6 +95,41 @@
         }
       }
     },
+    "Assignee" : {
+      "comment" : "Section title for the vehicle assignee.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Responsable"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Responsável"
+          }
+        }
+      }
+    },
+    "Assignee ID" : {
+      "comment" : "Label for editing the assignee identifier.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ID del responsable"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ID do responsável"
+          }
+        }
+      }
+    },
     "At least 6 characters" : {
       "localizations" : {
         "es" : {
@@ -129,6 +164,23 @@
         }
       }
     },
+    "Beacon" : {
+      "comment" : "Section title for beacon data.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beacon"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beacon"
+          }
+        }
+      }
+    },
     "Cancelled" : {
       "comment" : "Vehicle status cancelled",
       "localizations" : {
@@ -142,6 +194,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancelado"
+          }
+        }
+      }
+    },
+    "Changes saved successfully." : {
+      "comment" : "Success message after updating a vehicle.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambios guardados correctamente."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alterações salvas com sucesso."
           }
         }
       }
@@ -212,6 +282,24 @@
         }
       }
     },
+    "Current assignee" : {
+      "comment" : "Label for the current assignee information.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Responsable actual"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Responsável atual"
+          }
+        }
+      }
+    },
     "Decline" : {
       "comment" : "A button label that allows the user to decline an invitation.",
       "localizations" : {
@@ -225,6 +313,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recusar"
+          }
+        }
+      }
+    },
+    "Details" : {
+      "comment" : "Section title for vehicle details.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detalles"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detalhes"
           }
         }
       }
@@ -262,6 +367,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erro no email: %@"
+          }
+        }
+      }
+    },
+    "Entered at" : {
+      "comment" : "Label describing when the vehicle entered the yard.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrada en"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrada em"
           }
         }
       }
@@ -349,6 +471,24 @@
         }
       }
     },
+    "Go to tracker" : {
+      "comment" : "Button title that navigates to the tracker view.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ir al rastreador"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ir para o rastreador"
+          }
+        }
+      }
+    },
     "Hide confirm password" : {
       "localizations" : {
         "es" : {
@@ -414,6 +554,23 @@
         }
       }
     },
+    "Left at" : {
+      "comment" : "Label describing when the vehicle left the yard.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salida en"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saída em"
+          }
+        }
+      }
+    },
     "Let's set up your account" : {
       "localizations" : {
         "es" : {
@@ -426,6 +583,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vamos criar sua conta"
+          }
+        }
+      }
+    },
+    "Loading employees..." : {
+      "comment" : "Message shown while loading the list of yard employees.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cargando empleados..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carregando colaboradores..."
+          }
+        }
+      }
+    },
+    "Loading vehicle details..." : {
+      "comment" : "Message shown while loading vehicle details.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cargando detalles del vehículo..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carregando detalhes do veículo..."
           }
         }
       }
@@ -460,6 +651,57 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Carregando seus convites..."
+          }
+        }
+      }
+    },
+    "Major" : {
+      "comment" : "Label for the beacon major value.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Major"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Major"
+          }
+        }
+      }
+    },
+    "Minor" : {
+      "comment" : "Label for the beacon minor value.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minor"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minor"
+          }
+        }
+      }
+    },
+    "Model" : {
+      "comment" : "Vehicle model label.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modelo"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modelo"
           }
         }
       }
@@ -510,6 +752,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quando novos veículos forem registrados nesse pátio, eles aparecerão aqui."
+          }
+        }
+      }
+    },
+    "No assignee" : {
+      "comment" : "Message displayed when a vehicle has no assignee.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin responsable"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhum responsável"
+          }
+        }
+      }
+    },
+    "No departure recorded" : {
+      "comment" : "Fallback text when a vehicle has no recorded departure time.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin registro de salida"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saída não registrada"
           }
         }
       }
@@ -638,6 +914,23 @@
         }
       }
     },
+    "Plate" : {
+      "comment" : "Vehicle plate label.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Placa"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Placa"
+          }
+        }
+      }
+    },
     "Processing..." : {
       "comment" : "A text indicating that an invitation is being processed.",
       "localizations" : {
@@ -667,6 +960,58 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Repita sua senha"
+          }
+        }
+      }
+    },
+    "Retry" : {
+      "comment" : "Button label to retry loading data.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reintentar"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tentar novamente"
+          }
+        }
+      }
+    },
+    "Role" : {
+      "comment" : "Label for the assignee role.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cargo"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cargo"
+          }
+        }
+      }
+    },
+    "Save" : {
+      "comment" : "Button title for saving vehicle updates.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardar"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salvar"
           }
         }
       }
@@ -835,6 +1180,23 @@
         }
       }
     },
+    "Status" : {
+      "comment" : "Vehicle status label.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estado"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        }
+      }
+    },
     "The request could not be built." : {
       "comment" : "Error description when the HTTP request could not be composed.",
       "localizations" : {
@@ -854,7 +1216,6 @@
     },
     "The request failed with status code %lld." : {
       "comment" : "Generic error message when an HTTP request fails with a status code.",
-      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -955,6 +1316,75 @@
         }
       }
     },
+    "User ID" : {
+      "comment" : "Label for the assignee user identifier.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ID de usuario"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ID do usuário"
+          }
+        }
+      }
+    },
+    "UUID" : {
+      "comment" : "Label for the beacon UUID field.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UUID"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UUID"
+          }
+        }
+      }
+    },
+    "Vehicle details" : {
+      "comment" : "Title for the vehicle detail screen.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detalles del vehículo"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detalhes do veículo"
+          }
+        }
+      }
+    },
+    "Vehicle update failed." : {
+      "comment" : "Error message shown when the vehicle update fails.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error al actualizar el vehículo."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falha ao atualizar o veículo."
+          }
+        }
+      }
+    },
     "Waiting" : {
       "comment" : "Vehicle status waiting",
       "localizations" : {
@@ -1006,6 +1436,23 @@
         }
       }
     },
+    "We couldn't load the employees list." : {
+      "comment" : "Error message shown when the employees list could not be loaded.",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No pudimos cargar la lista de empleados."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível carregar a lista de colaboradores."
+          }
+        }
+      }
+    },
     "We couldn't load the vehicles." : {
       "comment" : "An error message displayed when the vehicle list fails to load.",
       "localizations" : {
@@ -1040,13 +1487,8 @@
         }
       }
     },
-    "We couldn't load your invites. (code (Int64(code)))" : {
-      "comment" : "Error message displayed when an error occurs while fetching the user's invites, including the status code received from the server.",
-      "isCommentAutoGenerated" : true
-    },
     "We couldn't load your invites. (code %lld)" : {
       "comment" : "Fallback error message with status code when invite loading fails.",
-      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {

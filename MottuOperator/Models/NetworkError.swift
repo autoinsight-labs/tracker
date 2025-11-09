@@ -19,18 +19,26 @@ extension NetworkError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .badUrl:
-            return String(localized: "The URL is invalid.")
+            return NSLocalizedString("The URL is invalid.", comment: "Error description shown when building the request URL fails.")
         case .invalidRequest:
-            return String(localized: "The request could not be built.")
+            return NSLocalizedString("The request could not be built.", comment: "Error description when the HTTP request could not be composed.")
         case .badResponse:
-            return String(localized: "The server returned an unexpected response.")
+            return NSLocalizedString("The server returned an unexpected response.", comment: "Error description when the server response is invalid.")
         case let .badStatus(code, data):
             if let message = NetworkError.extractErrorMessage(from: data) {
-                return "\(message) (code \(code))"
+                let format = NSLocalizedString(
+                    "%@ (code %lld)",
+                    comment: "API error with message and status code"
+                )
+                return String(format: format, message, Int64(code))
             }
-            return "The request failed with status code \(code)."
+            let format = NSLocalizedString(
+                "The request failed with status code %lld.",
+                comment: "Generic error message when an HTTP request fails with a status code."
+            )
+            return String(format: format, Int64(code))
         case .failedToDecodeResponse:
-            return String(localized: "We couldn't decode the server response.")
+            return NSLocalizedString("We couldn't decode the server response.", comment: "Error description when decoding a server response fails.")
         }
     }
     

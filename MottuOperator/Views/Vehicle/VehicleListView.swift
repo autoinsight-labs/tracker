@@ -120,18 +120,12 @@ private extension VehicleListView {
     
     func vehiclesList(for yardId: UUID) -> some View {
         List(filteredVehicles) { vehicle in
-            if let beacon = vehicle.beacon {
-                NavigationLink {
-                    TrackerView(
-                        uuid: beacon.uuid,
-                        major: beacon.major,
-                        minor: beacon.minor,
-                        vehicleId: vehicle.plate
-                    )
-                } label: {
-                    VehicleListItemView(vehicle: vehicle)
-                }
-            } else {
+            NavigationLink {
+                VehicleDetailView(
+                    yardID: yardId,
+                    vehicleID: vehicle.id
+                )
+            } label: {
                 VehicleListItemView(vehicle: vehicle)
             }
         }

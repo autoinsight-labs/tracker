@@ -20,8 +20,11 @@ struct Vehicle: Identifiable, Codable {
     struct Beacon: Identifiable, Codable {
         let id: UUID
         let uuid: UUID
-        let major: UInt16
-        let minor: UInt16
+        let major: String
+        let minor: String
+        
+        var majorAsUInt16: UInt16? { UInt16(major) }
+        var minorAsUInt16: UInt16? { UInt16(minor) }
     }
     
     enum Model: String, CaseIterable, Codable {

@@ -60,9 +60,13 @@ class InviteService {
                 self.isLoading = false
                 self.errorMessage = nil
             }
-        } catch let NetworkError.badStatus(_, data) {
+        } catch let NetworkError.badStatus(code, data) {
             await MainActor.run {
-                let fallback = String(localized: "We couldn't load your invites. (code (Int64(code)))")
+                let fallbackFormat = NSLocalizedString(
+                    "We couldn't load your invites. (code %lld)",
+                    comment: "Fallback error message with status code when invite loading fails."
+                )
+                let fallback = String(format: fallbackFormat, Int64(code))
                 let message = InviteService.extractErrorMessage(from: data) ?? fallback
                 self.errorMessage = message
                 self.isLoading = false
@@ -181,7 +185,7 @@ private extension InviteService {
         }
         
         return InviteServiceError.api(
-            message: String(localized: "The request failed."),
+            message: NSLocalizedString("The request failed.", comment: "Generic error message when a request fails without a status code."),
             statusCode: code
         )
     }
@@ -224,8 +228,10 @@ private enum InviteServiceError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case let .api(message, statusCode):
-            // Localize a format string, then insert message and code.
-            let format = NSLocalizedString("%@ (code %lld)", comment: "API error with message and status code")
+            let format = NSLocalizedString(
+                "%@ (code %lld)",
+                comment: "API error with message and status code"
+            )
             return String(format: format, message, Int64(statusCode))
         }
     }
