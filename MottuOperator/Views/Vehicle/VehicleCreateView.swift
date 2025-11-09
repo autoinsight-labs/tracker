@@ -35,7 +35,7 @@ struct VehicleCreateView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Vehicle information") {
+                Section {
                     TextField("Plate", text: $plate)
                         .textInputAutocapitalization(.characters)
                         .autocorrectionDisabled()
@@ -121,12 +121,12 @@ struct VehicleCreateView: View {
             .navigationTitle(Text("New vehicle"))
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", role: .cancel) {
+                    Button(role: .cancel) {
                         dismiss()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Add", action: handleSave)
+                    Button(role: .confirm, action: handleSave)
                         .disabled(!isFormValid || isSaving)
                 }
             }
