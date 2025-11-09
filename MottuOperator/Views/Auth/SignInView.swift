@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SignInView: View {
     @Environment(AuthService.self) private var authService: AuthService
+    @Environment(\.dismiss) private var dismiss
     
     @State private var email: String = ""
     @State private var password: String = ""
@@ -188,6 +189,11 @@ struct SignInView: View {
             }
             .padding(.horizontal, 20)
             .navigationBarBackButtonHidden(true)
+        }
+        .onChange(of: authService.isSignedIn) { _, isSignedIn in
+            if isSignedIn {
+                dismiss()
+            }
         }
     }
     
