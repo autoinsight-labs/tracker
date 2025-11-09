@@ -14,17 +14,17 @@ struct VehicleListItemView: View {
     let vehicle: Vehicle
     
     var beaconKey: String {
-        "\(vehicle.beacon.id)_\(vehicle.beacon.major)_\(vehicle.beacon.minor)"
+        "\(vehicle.beacon.uuid)_\(vehicle.beacon.major)_\(vehicle.beacon.minor)"
     }
     
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(vehicle.identifier)
+                Text(vehicle.plate)
                     .font(.headline)
                 
                 HStack {
-                    Text(vehicle.model.name)
+                    Text(vehicle.model.rawValue)
                         .foregroundStyle(.secondary)
                         .font(.subheadline)
                     
@@ -32,7 +32,7 @@ struct VehicleListItemView: View {
                         .foregroundStyle(.secondary)
                         .font(.subheadline)
                     
-                    Text(vehicle.model.year, format: .number.grouping(.never))
+                    Text(vehicle.enteredAt.formatted())
                         .foregroundStyle(.secondary)
                         .font(.subheadline)
                 }
@@ -56,7 +56,7 @@ struct VehicleListItemView: View {
         }
         .task {
             beaconService.startRanging(
-                uuid: vehicle.beacon.id,
+                uuid: vehicle.beacon.uuid,
                 major: vehicle.beacon.major,
                 minor: vehicle.beacon.minor
             )
@@ -95,23 +95,11 @@ struct VehicleListItemView: View {
     }
 }
 
-#Preview {
-    let vehicle = Vehicle(
-        id: UUID(),
-        identifier: "BRA0S17",
-        beacon: Vehicle.BeaconData(
-            id: UUID(uuidString: "FDA50693-A4E2-4FB1-AFCF-C6EB07647825") ?? UUID(),
-            major: 10167,
-            minor: 61958,
-        ),
-        model: Vehicle.Model(
-            name: "Mottu Model E",
-            year: 2020
-        )
-    )
-    
-    VehicleListItemView(vehicle: vehicle)
-        .environment(BeaconService())
-        .padding(.horizontal)
-}
+/*
+ #Preview {
+     VehicleListItemView(vehicle: vehicle)
+         .environment(BeaconService())
+         .padding(.horizontal)
+ }
+ **/
 
