@@ -196,19 +196,13 @@ struct VehicleCreateView: View {
             return
         }
         
-        guard let majorInt = Int(trimmedMajor), let minorInt = Int(trimmedMinor) else {
-            saveErrorMessage = String(localized: "The request failed.")
-            isSaving = false
-            return
-        }
-        
         let request = VehicleCreateRequest(
             plate: trimmedPlate,
             model: model,
             beacon: VehicleCreateRequest.Beacon(
                 uuid: uuid,
-                major: majorInt,
-                minor: minorInt
+                major: trimmedMajor,
+                minor: trimmedMinor
             ),
             assigneeId: selectedAssigneeId
         )

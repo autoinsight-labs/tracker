@@ -161,8 +161,8 @@ struct VehicleUpdateRequest: Encodable {
 struct VehicleCreateRequest: Encodable {
     struct Beacon: Encodable {
         let uuid: UUID
-        let major: Int
-        let minor: Int
+        let major: String
+        let minor: String
     }
     
     let plate: String
